@@ -2,6 +2,12 @@
 
 Scalanum - is the Enum and Bounded type classes implemented in Scala. The implementation is inspired by the corresponding type class in Haskell. These particular type classes are missing in Cats and I don't really want to bring Scalaz to my projects because of this small inconvenience. That's why I came up with my own minimalistic version of Enum and Bounded with zero external dependencies. Below are some useful examples.
 
+First we need to prepare the environment:
+```
+sbt clean package
+scala -cp ./scalanum/target/scala-2.11/scalanum_2.11-0.1.jar
+```
+
 For our example we use the following sum type:
 ```scala
 sealed trait Animal
@@ -20,7 +26,7 @@ implicit val animalEnum = new Enum[Animal] {
   override def toEnum(i: Int): Animal = animals(i)
 }
 ```
-Or the same implementation but shorter:
+Or the same but shorter:
 ```scala
 import scalanum._
 
@@ -36,7 +42,7 @@ res0: Animal = Dog
 scala> Enum[Animal].pred(Cow)
 res1: Animal = Rabbit
 ```
-Scalanum is able to generate collections of enumerated values that are evaluated lazily:
+Scalanum is able to generate collections of enumerated values:
 ```scala
 scala> Enum[Animal].fromTo(Cat, Rabbit).foreach(println)
 Cat
@@ -84,4 +90,26 @@ scala> Enum[Int].fromThenTo(1, 5, 20).foreach(println)
 9
 13
 17
+```
+At last a small example from the real world:
+```
+import scalanum._
+
+sealed trait TrafficLight
+case object Green extends TrafficLight
+case object Yellow extends TrafficLight
+case object Red extends TrafficLight
+
+implicit val trafficLightEnum = new EnumIndexed[TrafficLight] {
+  override val list: IndexedSeq[TrafficLight] = Array(Green, Yellow, Red)
+}
+
+scala> Enum[TrafficLight].succ(Green)
+res0: TrafficLight = Yellow
+
+scala> Enum[TrafficLight].succ(Enum[TrafficLight].succ(Green))
+res2: TrafficLight = Red
+
+scala> Enum[TrafficLight].pred(Red)
+res3: TrafficLight = Yellow
 ```
