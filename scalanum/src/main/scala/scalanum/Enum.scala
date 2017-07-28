@@ -16,13 +16,13 @@ trait Enum[A] {
   def fromEnum(a: A): Int
 
   /**
-   * Returns a successor for the given value.
+   * Returns a successor of the given value.
    */
   def succ(a: A): A =
     toEnum(fromEnum(a) + 1)
 
   /**
-   * Returns a predecessor for the given value.
+   * Returns a predecessor of the given value.
    */
   def pred(a: A): A =
     toEnum(fromEnum(a) - 1)
@@ -54,7 +54,7 @@ trait Enum[A] {
    * Creates a lazy collection of enumerated values without specifying the last
    * element. In this case the last element is represented by an upper bound
    * of the specific type.
-   *
+   *``
    * @param a1 the first element of the sequence.
    * @return a lazy collection of enumerated values.
    */
@@ -81,12 +81,12 @@ trait EnumIndexed[A] extends Enum[A] {
 object Enum {
   @inline def apply[A](implicit e: Enum[A]): Enum[A] = e
 
-  implicit val intEnum = new Enum[Int] {
+  implicit val intEnum: Enum[Int] = new Enum[Int] {
     override def toEnum(i: Int): Int = i
     override def fromEnum(a: Int): Int = a
   }
 
-  implicit val charEnum = new Enum[Char] {
+  implicit val charEnum: Enum[Char] = new Enum[Char] {
     override def toEnum(i: Int): Char = i.toChar
     override def fromEnum(a: Char): Int = a.toInt
   }
