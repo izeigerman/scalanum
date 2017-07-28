@@ -91,8 +91,8 @@ scala> Enum[Int].fromThenTo(1, 5, 20).foreach(println)
 13
 17
 ```
-At last a small example from the real world:
-```
+At last a small real world example:
+```scala
 import scalanum._
 
 sealed trait TrafficLight
